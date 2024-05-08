@@ -1,12 +1,21 @@
-import { Postagem } from '../entities/postagem.entity';
+
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { TemaService } from 'src/tema/service/tema.service';
-import { DeleteResult, ILike, Repository } from 'typeorm';
-
+import { Postagem } from "../entities/postagem.entity";
+import { TemaService } from "../../tema/services/tema.service"
+import { DeleteResult, ILike, Repository } from "typeorm";
 
 @Injectable()
 export class PostagemService{
+    findByTitulo(titulo: string): Promise<Postagem[]> {
+        throw new Error('Method not implemented.');
+    }
+    create(postagem: Postagem): Promise<Postagem> {
+        throw new Error('Method not implemented.');
+    }
+    update(postagem: Postagem): Promise<Postagem> {
+        throw new Error('Method not implemented.');
+    }
 
     constructor(
         @InjectRepository(Postagem)
@@ -17,7 +26,8 @@ export class PostagemService{
     async findAll(): Promise<Postagem[]>{
         return await this.postagemRepository.find({
         relations:{
-            tema: true
+            tema: true, 
+            usuario: true
         }
         });
      
@@ -30,7 +40,8 @@ export class PostagemService{
                 id
             },
             relations:{
-                tema: true
+                tema: true,
+                usuario: true
             }
         });
         if (!postagem)
@@ -44,7 +55,8 @@ async findByTexto(texto: string): Promise<Postagem[]>{
             texto:  ILike(`%${texto}%`)
         },
         relations:{
-            tema: true
+            tema: true,
+            usuario: true
         }
     });
 

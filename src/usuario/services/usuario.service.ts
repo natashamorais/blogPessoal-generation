@@ -1,9 +1,8 @@
-﻿import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Usuario } from '../entities/usuario.entity';
-import { Bcrypt } from 'src/auth/bycript/bycript';
-
+﻿import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Bcrypt } from "src/auth/bycript/bycript";
+import { Repository } from "typeorm";
+import { Usuario } from "../entities/usuario.entity";
 
 @Injectable()
 export class UsuarioService {
@@ -50,39 +49,32 @@ export class UsuarioService {
 
     }
 
-    async create(objetoUsuario: Usuario): Promise<Usuario> {
+    async create(usuario: Usuario): Promise<Usuario> {
         
-        let buscaUsuario = await this.findByUsuario(objetoUsuario.usuario);
+        let buscaUsuario = await this.findByUsuario(usuario.usuario);
 
         if (!buscaUsuario) {
-
-            if (!objetoUsuario.foto)
-                objetoUsuario.foto = 'https://i.imgur.com/Sk5SjWE.jpg'
-            
-            objetoUsuario.senha = await this.bcrypt.criptografarSenha(objetoUsuario.senha)
-            return await this.usuarioRepository.save(objetoUsuario);
+            usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha)
+            return await this.usuarioRepository.save(usuario);
         }
 
         throw new HttpException("O Usuario ja existe!", HttpStatus.BAD_REQUEST);
 
     }
 
-    async update(objetoUsuario: Usuario): Promise<Usuario> {
+    async update(usuario: Usuario): Promise<Usuario> {
 
-        let updateUsuario: Usuario = await this.findById(objetoUsuario.id);
-        let buscaUsuario = await this.findByUsuario(objetoUsuario.usuario);
+        let updateUsuario: Usuario = await this.findById(usuario.id);
+        let buscaUsuario = await this.findByUsuario(usuario.usuario);
 
         if (!updateUsuario)
             throw new HttpException('Usuário não encontrado!', HttpStatus.NOT_FOUND);
 
-        if (buscaUsuario && buscaUsuario.id !== objetoUsuario.id)
+        if (buscaUsuario && buscaUsuario.id !== usuario.id)
             throw new HttpException('Usuário (e-mail) já Cadastrado!', HttpStatus.BAD_REQUEST);
 
-        if (!objetoUsuario.foto)
-            objetoUsuario.foto = 'https://i.imgur.com/Sk5SjWE.jpg'
-
-        objetoUsuario.senha = await this.bcrypt.criptografarSenha(objetoUsuario.senha)
-        return await this.usuarioRepository.save(objetoUsuario);
+        usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha)
+        return await this.usuarioRepository.save(usuario);
 
     }
 

@@ -1,10 +1,16 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { DeleteResult, ILike, Repository } from "typeorm";
+import { Repository, ILike, DeleteResult } from "typeorm";
 import { Tema } from "../entities/tema.entity";
 
 @Injectable()
 export class TemaService {
+    create(tema: Tema): Promise<Tema> {
+        throw new Error("Method not implemented.");
+    }
+    update(tema: Tema): Promise<Tema> {
+        throw new Error("Method not implemented.");
+    }
     constructor(
         @InjectRepository(Tema)
         private temaRepository: Repository<Tema>
